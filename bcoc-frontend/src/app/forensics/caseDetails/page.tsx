@@ -10,6 +10,8 @@ import { Progress } from "antd";
 import { Table, Tag } from 'antd';
 import Link from "next/link";
 import { Report, fabricService } from "../../services/fabricService";
+import ProtectedRoute from "../../components/ProtectedRoute";
+
 interface PinListItem {
   id: string; // Add this
   ipfs_pin_hash: string; // Add this
@@ -182,33 +184,33 @@ export default function Home() {
   };
 
   return (
-    <>
-    <Header title="Case Details" />
-    <div className="wrapper-display">
-  <div className="fetch-files-container">
-    <Form onFinish={handleFetchFiles}>
-      <Form.Item
-        name="groupId"
-        label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
-        rules={[{ required: true, message: "Group ID is required" }]}
-      >
-        <Input
-          value={groupId}
-          onChange={(e) => setGroupId(e.target.value)}
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Fetch Files
-        </Button>
-      </Form.Item>
-    </Form>
+    <ProtectedRoute allowedRole="Analyst">
+      <Header title="Case Details" />
+      <div className="wrapper-display">
+        <div className="fetch-files-container">
+          <Form onFinish={handleFetchFiles}>
+            <Form.Item
+              name="groupId"
+              label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
+              rules={[{ required: true, message: "Group ID is required" }]}
+            >
+              <Input
+                value={groupId}
+                onChange={(e) => setGroupId(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Fetch Files
+              </Button>
+            </Form.Item>
+          </Form>
 
-    <div id="fileList">
-      {fetchedFiles.length === 0 ? (
-        <p>No files found.</p>
-      ) : (
-        <Table
+          <div id="fileList">
+            {fetchedFiles.length === 0 ? (
+              <p>No files found.</p>
+            ) : (
+              <Table
                 columns={columns}
                 dataSource={fetchedFiles}
                 rowKey="id"
@@ -219,109 +221,108 @@ export default function Home() {
                   total: fetchedFiles.length,
                 }}
               />
-      )}
-    </div>
-  </div>
+            )}
+          </div>
+        </div>
 
-  <div className="link-container">
-  <Form onFinish={handleFetchFile}>
-    <Form.Item
-      label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
-      name="groupId"
-      rules={[{ required: true, message: "Group ID is required" }]}
-    >
-      <Input value={CID} onChange={(e) => setCID(e.target.value)} />
-    </Form.Item>
-    <Form.Item label=" ">
-      <Button type="primary" htmlType="submit" loading={loading}>
-        Fetch File
-      </Button>
-    </Form.Item>
-  </Form>
+        <div className="link-container">
+          <Form onFinish={handleFetchFile}>
+            <Form.Item
+              label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
+              name="groupId"
+              rules={[{ required: true, message: "Group ID is required" }]}
+            >
+              <Input value={CID} onChange={(e) => setCID(e.target.value)} />
+            </Form.Item>
+            <Form.Item label=" ">
+              <Button type="primary" htmlType="submit" loading={loading}>
+                Fetch File
+              </Button>
+            </Form.Item>
+          </Form>
 
-  {fileUrl ? (
-    <div style={{ marginTop: "20px" }}>
-      <h3 style={{ color: "#fff", fontSize: "18px" }}>Fetched File:</h3>
-      <a
-        href={fileUrl.startsWith('http') ? fileUrl : `https://${fileUrl}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#1890ff", fontSize: "16px", wordBreak: "break-all" }}
-      >
-        {fileUrl}
-      </a>
-    </div>
-  ) : (
-    <div style={{ marginTop: "20px" }}>
-      <p style={{ color: "#fff", fontSize: "16px" }}>No file found. Please check the Group ID and try again.</p>
-    </div>
-  )}
-</div>
-</div>
+          {fileUrl ? (
+            <div style={{ marginTop: "20px" }}>
+              <h3 style={{ color: "#fff", fontSize: "18px" }}>Fetched File:</h3>
+              <a
+                href={fileUrl.startsWith('http') ? fileUrl : `https://${fileUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#1890ff", fontSize: "16px", wordBreak: "break-all" }}
+              >
+                {fileUrl}
+              </a>
+            </div>
+          ) : (
+            <div style={{ marginTop: "20px" }}>
+              <p style={{ color: "#fff", fontSize: "16px" }}>No file found. Please check the Group ID and try again.</p>
+            </div>
+          )}
+        </div>
+      </div>
 
-     <div className="report-container">
-      <Form
-  onFinish={handleReportUpload}
-  initialValues={{ variant: "filled" }}
-  style={{
-    background: "#000",
-    padding: "20px",
-    borderRadius: "8px",
-    color: "#fff",
-    maxWidth: "800px",
-    width: "100%",
-    boxShadow: "0px 0px 10px rgba(255, 255, 255, 0.1)",
-  }}
->
-  <Form.Item
-    label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
-    name="reportGroupId"
-    rules={[{ required: true, message: "Group ID is required" }]}
-  >
-    <Input
-      style={{ background: "#222", color: "#fff", border: "1px solid #444" }}
-      value={reportGroupId}
-      onChange={(e) => setReportGroupId(e.target.value)}
-    />
-  </Form.Item>
+      <div className="report-container">
+        <Form
+          onFinish={handleReportUpload}
+          initialValues={{ variant: "filled" }}
+          style={{
+            background: "#000",
+            padding: "20px",
+            borderRadius: "8px",
+            color: "#fff",
+            maxWidth: "800px",
+            width: "100%",
+            boxShadow: "0px 0px 10px rgba(255, 255, 255, 0.1)",
+          }}
+        >
+          <Form.Item
+            label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
+            name="reportGroupId"
+            rules={[{ required: true, message: "Group ID is required" }]}
+          >
+            <Input
+              style={{ background: "#222", color: "#fff", border: "1px solid #444" }}
+              value={reportGroupId}
+              onChange={(e) => setReportGroupId(e.target.value)}
+            />
+          </Form.Item>
 
-  <Form.Item
-    label={<span style={{ color: "#fff", fontSize: "20px" }}>Select Report File</span>}
-    name="reportFile"
-    rules={[{ required: true, message: "Report file is required" }]}
-  >
-    <Input
-      type="file"
-      onChange={(e) => e.target.files && setReportFile(e.target.files[0])}
-      style={{ color: "#fff" }}
-    />
-    {reportFile && (
-      <p style={{ color: "#fff" }}>Selected file: {reportFile.name}</p>
-    )}
-  </Form.Item>
+          <Form.Item
+            label={<span style={{ color: "#fff", fontSize: "20px" }}>Select Report File</span>}
+            name="reportFile"
+            rules={[{ required: true, message: "Report file is required" }]}
+          >
+            <Input
+              type="file"
+              onChange={(e) => e.target.files && setReportFile(e.target.files[0])}
+              style={{ color: "#fff" }}
+            />
+            {reportFile && (
+              <p style={{ color: "#fff" }}>Selected file: {reportFile.name}</p>
+            )}
+          </Form.Item>
 
-  {/* Progress Bar */}
-  {reportUploading && (
-    <Progress
-      percent={reportUploadProgress}
-      strokeColor="#fff"
-      style={{ marginBottom: "20px" }}
-    />
-  )}
+          {/* Progress Bar */}
+          {reportUploading && (
+            <Progress
+              percent={reportUploadProgress}
+              strokeColor="#fff"
+              style={{ marginBottom: "20px" }}
+            />
+          )}
 
-  <Form.Item style={{ textAlign: "center" }}>
-    <Button
-      type="primary"
-      htmlType="submit"
-      loading={reportUploading}
-      style={{ background: "#444", border: "none", width: "100%" }}
-    >
-      Upload Report
-    </Button>
-  </Form.Item>
-</Form>
-</div>
-      
-    </>
+          <Form.Item style={{ textAlign: "center" }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={reportUploading}
+              style={{ background: "#444", border: "none", width: "100%" }}
+            >
+              Upload Report
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </ProtectedRoute>
   );
 }

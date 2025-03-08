@@ -23,28 +23,49 @@ app.use(cors());
 app.use(express.json());
 
 async function connectToNetwork() {
-    const ccpPath = path.resolve(__dirname, config.connectionProfilePath);
+    try {
+        const ccpPath = path.resolve(__dirname, config.connectionProfilePath);
+        console.log("Connection Profile Path:", ccpPath);
+        
+        const rawCCP = fs.readFileSync(ccpPath, 'utf8');
+        console.log("Raw connection profile (first 100 chars):", rawCCP.substring(0, 100));
+        
+        const ccp = JSON.parse(rawCCP);
+        console.log("Successfully parsed connection profile");
 
-    const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
+        const walletPath = path.join(__dirname, config.walletPath);
+        console.log("Wallet Path:", walletPath);
+        
+        const wallet = await Wallets.newFileSystemWallet(walletPath);
+        const gateway = new Gateway();
+        
+        await gateway.connect(ccp, { 
+            wallet, 
+            identity: 'admin',
+            discovery: { enabled: false, asLocalhost: true },
+            eventHandlerOptions: {
+                commitTimeout: 100,
+                endorseTimeout: 30
+            }
+        });
 
-    const walletPath = path.join(__dirname, config.walletPath);
-    const wallet = await Wallets.newFileSystemWallet(walletPath);
+        console.log('Gateway connected, getting network...');
+        const network = await gateway.getNetwork(config.channelName);
+        console.log('Got network, getting contract...');
+        const contract = network.getContract(config.chaincodeName);
+        console.log('Got contract');
 
-    const gateway = new Gateway();
-    await gateway.connect(ccp, { wallet, identity: 'admin', discovery: { enabled: true, asLocalhost: true } });
-
-
-
-    const network = await gateway.getNetwork(config.channelName);
-    const contract = network.getContract(config.chaincodeName);
-
-    return { gateway, contract };
+        return { gateway, contract };
+    } catch (error) {
+        console.error("Error in connectToNetwork:", error);
+        throw error;
+    }
 }
 
 // Add new evidence
 app.post('/api/evidence', async (req, res) => {
     try {
-        console.log('Received request:', req.body);
+        console.log('Received request body:', JSON.stringify(req.body, null, 2));
 
         const { Name, Type, ID, Source, Location, Timestamp, CID, GroupID } = req.body;
 
@@ -54,26 +75,26 @@ app.post('/api/evidence', async (req, res) => {
 
         console.log('Evidence is being linked to Group ID:', GroupID);
 
-        // Connect to the Fabric network
         const { gateway, contract } = await connectToNetwork();
+        console.log('Successfully connected to network');
 
-        // Submit the evidence data to the blockchain
-        await contract.submitTransaction(
+        const evidenceData = [Name, Type, ID, Source, Location, Timestamp, CID, GroupID];
+        console.log('Submitting transaction with args:', JSON.stringify(evidenceData, null, 2));
+
+        const result = await contract.submitTransaction(
             'CreateEvidence',
-            Name,
-            Type,
-            ID,
-            Source,
-            Location,
-            Timestamp,
-            CID,
-            GroupID
+            ...evidenceData
         );
 
-        // Disconnect from the gateway
+        console.log('Transaction submitted successfully');
         await gateway.disconnect();
 
-        res.json({ success: true, message: 'Evidence added to the blockchain successfully', data: req.body });
+        res.json({ 
+            success: true, 
+            message: 'Evidence added to the blockchain successfully', 
+            data: req.body,
+            result: result.toString()
+        });
     } catch (error) {
         console.error('Failed to create evidence:', error);
         res.status(500).json({ error: error.message });

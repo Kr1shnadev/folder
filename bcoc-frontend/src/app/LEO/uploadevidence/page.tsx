@@ -5,6 +5,7 @@ import { Upload, Button, message, Form, Input, Progress } from "antd";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { Evidence, fabricService } from "../../services/fabricService";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 interface NewEvidence {
   Location: string;
@@ -12,7 +13,7 @@ interface NewEvidence {
   CID: string;
 }
 
-export default function Home() {
+export default function UploadEvidence() {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -88,7 +89,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <ProtectedRoute allowedRole="LEO">
       <Header title="Upload Evidence" />
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
         <Form
@@ -116,7 +117,7 @@ export default function Home() {
             <Input style={{ background: "#222", color: "#fff", border: "1px solid #444" }} />
           </Form.Item>
 
-          <Form.Item label={<span style={{ color: "#fff", fontSize: "20px" }}>Source</span>} name="Source" rules={[{ required: true, message: "Please input!" }]}>
+          <Form.Item label={<span style={{ color: "#fff", fontSize: "20px" }}>Source</span>} name="Source" rules={[{ required: true, message: "Please input the source!" }]}>
             <Input style={{ background: "#222", color: "#fff", border: "1px solid #444" }} />
           </Form.Item>
 
@@ -135,6 +136,6 @@ export default function Home() {
         </Form>
       </div>
       <Footer projectName="LEO" />
-    </>
+    </ProtectedRoute>
   );
 }

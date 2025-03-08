@@ -8,7 +8,7 @@ import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { Progress } from "antd";
 import { Table, Tag } from 'antd';
-import Link from "next/link";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 interface PinListItem {
   id: string; // Add this
@@ -165,33 +165,33 @@ export default function Home() {
   };
 
   return (
-    <>
-    <Header title="View Evidence" />
-    <div className="wrapper-display">
-  <div className="fetch-files-container">
-    <Form onFinish={handleFetchFiles}>
-      <Form.Item
-        name="groupId"
-        label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
-        rules={[{ required: true, message: "Group ID is required" }]}
-      >
-        <Input
-          value={groupId}
-          onChange={(e) => setGroupId(e.target.value)}
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Fetch Files
-        </Button>
-      </Form.Item>
-    </Form>
+    <ProtectedRoute allowedRole="Judiciary">
+      <Header title="View Evidence" />
+      <div className="wrapper-display">
+        <div className="fetch-files-container">
+          <Form onFinish={handleFetchFiles}>
+            <Form.Item
+              name="groupId"
+              label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
+              rules={[{ required: true, message: "Group ID is required" }]}
+            >
+              <Input
+                value={groupId}
+                onChange={(e) => setGroupId(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Fetch Files
+              </Button>
+            </Form.Item>
+          </Form>
 
-    <div id="fileList">
-      {fetchedFiles.length === 0 ? (
-        <p>No files found.</p>
-      ) : (
-        <Table
+          <div id="fileList">
+            {fetchedFiles.length === 0 ? (
+              <p>No files found.</p>
+            ) : (
+              <Table
                 columns={columns}
                 dataSource={fetchedFiles}
                 rowKey="id"
@@ -202,44 +202,40 @@ export default function Home() {
                   total: fetchedFiles.length,
                 }}
               />
-      )}
-    </div>
-  </div>
+            )}
+          </div>
+        </div>
 
-  <div className="link-container">
-    <Form onFinish={handleFetchFile}>
-      <Form.Item
-        label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
-    name="groupId"
-    rules={[{ required: true, message: "Group ID is required" }]}
-        
-      >
-        <Input value={CID} onChange={(e) => setCID(e.target.value)} />
-      </Form.Item>
-      <Form.Item label=" ">
-        <Button type="primary" htmlType="submit">
-          Fetch File
-        </Button>
-      </Form.Item>
-    </Form>
-    
-
-    {fileUrl && (
-  <div>
-    <h3>Fetched File:</h3>
-    <a 
-      href={fileUrl.startsWith('http') ? fileUrl : `https://${fileUrl}`} 
-      target="_blank" 
-      rel="noopener noreferrer"
-    >
-      {fileUrl}
-    </a>
-  </div>
-)}
-  </div>
-</div>
-
-     
-    </>
+        <div className="link-container">
+          <Form onFinish={handleFetchFile}>
+            <Form.Item
+              label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
+              name="groupId"
+              rules={[{ required: true, message: "Group ID is required" }]}
+            >
+              <Input value={CID} onChange={(e) => setCID(e.target.value)} />
+            </Form.Item>
+            <Form.Item label=" ">
+              <Button type="primary" htmlType="submit">
+                Fetch File
+              </Button>
+            </Form.Item>
+          </Form>
+          
+          {fileUrl && (
+            <div>
+              <h3>Fetched File:</h3>
+              <a 
+                href={fileUrl.startsWith('http') ? fileUrl : `https://${fileUrl}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                {fileUrl}
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </ProtectedRoute>
   );
 }
