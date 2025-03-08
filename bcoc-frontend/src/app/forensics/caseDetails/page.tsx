@@ -228,7 +228,7 @@ export default function Home() {
         <div className="link-container">
           <Form onFinish={handleFetchFile}>
             <Form.Item
-              label={<span style={{ color: "#fff", fontSize: "20px" }}>Group ID</span>}
+              label={<span style={{ color: "#fff", fontSize: "20px" }}>File ID</span>}
               name="groupId"
               rules={[{ required: true, message: "Group ID is required" }]}
             >

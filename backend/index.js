@@ -64,40 +64,29 @@ async function connectToNetwork() {
 
 // Add new evidence
 app.post('/api/evidence', async (req, res) => {
+    console.log('Received request body:', JSON.stringify(req.body, null, 2));
     try {
-        console.log('Received request body:', JSON.stringify(req.body, null, 2));
-
-        const { Name, Type, ID, Source, Location, Timestamp, CID, GroupID } = req.body;
-
-        if (!Name || !Type || !ID || !Source || !Location || !Timestamp || !CID || !GroupID) {
-            throw new Error('Missing required fields');
-        }
-
+        const { Name, Type, ID, GroupID, Location, Source, CID, Timestamp } = req.body;
         console.log('Evidence is being linked to Group ID:', GroupID);
 
-        const { gateway, contract } = await connectToNetwork();
+        const { contract } = await connectToNetwork();
         console.log('Successfully connected to network');
 
-        const evidenceData = [Name, Type, ID, Source, Location, Timestamp, CID, GroupID];
-        console.log('Submitting transaction with args:', JSON.stringify(evidenceData, null, 2));
+        const args = [Name, Type, ID, Source, Location, Timestamp, CID, GroupID];
+        console.log('Submitting transaction with args:', JSON.stringify(args, null, 2));
 
-        const result = await contract.submitTransaction(
-            'CreateEvidence',
-            ...evidenceData
-        );
-
-        console.log('Transaction submitted successfully');
-        await gateway.disconnect();
-
-        res.json({ 
-            success: true, 
-            message: 'Evidence added to the blockchain successfully', 
-            data: req.body,
-            result: result.toString()
-        });
+        try {
+            const result = await contract.submitTransaction('CreateEvidence', ...args);
+            console.log('Transaction submitted successfully. Result:', result.toString());
+            res.json({ success: true, message: 'Evidence created successfully', txId: result.toString() });
+        } catch (submitError) {
+            console.error('Error in contract.submitTransaction:', submitError);
+            console.error('Error details:', JSON.stringify(submitError, null, 2));
+            throw submitError;
+        }
     } catch (error) {
         console.error('Failed to create evidence:', error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 app.post('/api/report', async (req, res) => {

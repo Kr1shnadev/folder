@@ -2,69 +2,69 @@
   "name": "test-network",
   "version": "1.0.0",
   "client": {
-    "organization": "Org1",
-    "connection": {
-      "timeout": {
-        "peer": {
-          "endorser": "300"
-        }
+      "organization": "Org1",
+      "connection": {
+          "timeout": {
+              "peer": {
+                  "endorser": "300"
+              }
+          }
       }
-    }
   },
   "channels": {
-    "mychannel": {
-      "orderers": ["orderer.example.com"],
-      "peers": {
-        "peer0.org1.example.com": {
-          "endorsingPeer": true,
-          "chaincodeQuery": true,
-          "ledgerQuery": true,
-          "eventSource": true
-        }
+      "mychannel": {
+          "orderers": ["orderer.example.com"],
+          "peers": {
+              "peer0.org1.example.com": {
+                  "endorsingPeer": true,
+                  "chaincodeQuery": true,
+                  "ledgerQuery": true,
+                  "eventSource": true
+              }
+          }
       }
-    }
   },
   "organizations": {
-    "Org1": {
-      "mspid": "Org1MSP",
-      "peers": ["peer0.org1.example.com"],
-      "certificateAuthorities": ["ca.org1.example.com"]
-    }
+      "Org1": {
+          "mspid": "Org1MSP",
+          "peers": ["peer0.org1.example.com"],
+          "certificateAuthorities": ["ca.org1.example.com"]
+      }
   },
   "orderers": {
-    "orderer.example.com": {
-      "url": "grpcs://172.31.55.130:7050",
-      "tlsCACerts": {
-        "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt"
-      },
-      "grpcOptions": {
-        "ssl-target-name-override": "orderer.example.com",
-        "hostnameOverride": "orderer.example.com"
+      "orderer.example.com": {
+          "url": "grpcs://172.31.55.130:7050",
+          "tlsCACerts": {
+              "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt"
+          },
+          "grpcOptions": {
+              "ssl-target-name-override": "orderer.example.com",
+              "hostnameOverride": "orderer.example.com"
+          }
       }
-    }
   },
   "peers": {
-    "peer0.org1.example.com": {
-      "url": "grpcs://172.31.55.130:7051",
-      "tlsCACerts": {
-        "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
-      },
-      "grpcOptions": {
-        "ssl-target-name-override": "peer0.org1.example.com",
-        "hostnameOverride": "peer0.org1.example.com"
+      "peer0.org1.example.com": {
+          "url": "grpcs://172.31.55.130:7051",
+          "tlsCACerts": {
+              "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
+          },
+          "grpcOptions": {
+              "ssl-target-name-override": "peer0.org1.example.com",
+              "hostnameOverride": "peer0.org1.example.com"
+          }
       }
-    }
   },
   "certificateAuthorities": {
-    "ca.org1.example.com": {
-      "url": "https://172.31.55.130:7054",
-      "caName": "ca.org1.example.com",
-      "tlsCACerts": {
-        "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem"
-      },
-      "httpOptions": {
-        "verify": false
+      "ca.org1.example.com": {
+          "url": "https://172.31.55.130:7054",
+          "caName": "ca.org1.example.com",
+          "tlsCACerts": {
+              "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem"
+          },
+          "httpOptions": {
+              "verify": false
+          }
       }
-    }
   }
-}
+} 

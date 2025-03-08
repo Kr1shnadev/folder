@@ -26,11 +26,22 @@
     "peer0.org1.example.com": {
       "url": "grpcs://localhost:7051",
       "tlsCACerts": {
-        "pem": "-----BEGIN CERTIFICATE-----\nMIICWDCCAf2gAwIBAgIQeB7E+pcN423/PcnJAsCOJzAKBggqhkjOPQQDAjB2MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz\nY2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yNTAzMDcxOTE4MDBaFw0zNTAzMDUxOTE4\nMDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH\nEw1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD\nVQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D\nAQcDQgAEgr9phYJQtgyzoeKVmrr0q2MFWz44P84R/K/jUqepXyPxq9rFVNQSf1FX\nK0jKkDW+G5XZRqVHte+aVa5NrH6LmKNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud\nJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud\nDgQiBCA8po2k3EAb//4SbM31PdMqwRLPIQE/0vHB9SU0RtFeMzAKBggqhkjOPQQD\nAgNJADBGAiEA4oVqpz2UhtY4h6HhzGEKlK2Jz0k34sMTQ4wwKThoCUgCIQCr65Bx\n+/R1ujCfdDyLB2N6bGJ/vTdS2XHGSXmPLTq3pg==\n-----END CERTIFICATE-----\n"
+        "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
       },
       "grpcOptions": {
         "ssl-target-name-override": "peer0.org1.example.com",
         "hostnameOverride": "peer0.org1.example.com"
+      }
+    }
+  },
+  "orderers": {
+    "orderer.example.com": {
+      "url": "grpcs://localhost:7050",
+      "tlsCACerts": {
+        "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "orderer.example.com"
       }
     }
   },
@@ -39,9 +50,7 @@
       "url": "https://localhost:7054",
       "caName": "ca-org1",
       "tlsCACerts": {
-        "pem": [
-          "-----BEGIN CERTIFICATE-----\nMIICUjCCAfigAwIBAgIRALjqu6amozSutE08dJ2Q7fYwCgYIKoZIzj0EAwIwczEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xHDAaBgNVBAMTE2Nh\nLm9yZzEuZXhhbXBsZS5jb20wHhcNMjUwMzA3MTkxODAwWhcNMzUwMzA1MTkxODAw\nWjBzMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMN\nU2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UE\nAxMTY2Eub3JnMS5leGFtcGxlLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IA\nBErBF0cjJq8UMksrb9BA++vOxzyS5fILhWrw6b5wtgVNCG6Y4dQ54CWmDTEQ+ZAb\nI8g91PXQ8tpqq966nCyZMXajbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAU\nBggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQg\nB5LIdo7eLfc+eFrCTWlsJakDYY64yptKy9ZeauIGUpYwCgYIKoZIzj0EAwIDSAAw\nRQIhAJLQL1cD00MsMIdqEmNK0yF9YflIblrgteXitkBH3yGeAiBMrZbVI4OlmA1Z\nlGER8+0+wNeMgM3BzbPtfixHZ4D0ww==\n-----END CERTIFICATE-----\n"
-        ]
+        "path": "//wsl.localhost/Ubuntu/home/krishnadev/krishnadevhf2/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem"
       },
       "httpOptions": {
         "verify": false
